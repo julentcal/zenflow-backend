@@ -11,7 +11,6 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Usuarios
         User::factory()->create([
             'name' => 'Admin Yoga',
             'email' => 'admin@admin.com',
@@ -19,7 +18,6 @@ class DatabaseSeeder extends Seeder
         ]);
         User::factory(5)->create();
 
-        // 2. DEFINICIÓN DE RUTINAS
         $rutina_L_X_V = [
             [8,  'Ashtanga Despertar', 'María M.'],
             [10, 'Vinyasa Flow',       'Araceli C.'],
@@ -41,7 +39,6 @@ class DatabaseSeeder extends Seeder
             [12, 'Flexibilidad Total', 'Araceli C.'],
         ];
 
-        // CONTADOR DE DOMINGOS
         $conteoDomingos = 0;
 
         for ($i = 0; $i < 28; $i++) {
@@ -49,7 +46,6 @@ class DatabaseSeeder extends Seeder
             $fechaBase = Carbon::now()->addDays($i);
             $clasesDelDia = [];
 
-            // --- LÓGICA DE DOMINGOS ESPECIALES --- //
             if ($fechaBase->isSunday()) {
                 
                 $conteoDomingos++; 

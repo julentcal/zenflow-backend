@@ -28,9 +28,7 @@ class BookingController extends Controller
 
     public function index(Request $request)
     {
-        // 1. Buscamos al usuario actual
-        // 2. Pedimos sus reservas
-        // 3. Con 'with' cargamos los datos de la clase (para saber el nombre, hora, etc.)
+
         $bookings = $request->user()->bookings()->with('yogaClass')->get();
 
         return response()->json($bookings);
@@ -38,7 +36,6 @@ class BookingController extends Controller
 
     public function destroy(Request $request, $id)
     {
-        // 1. Buscamos la reserva, pero ASEGURANDO que sea del usuario logueado
         $booking = $request->user()->bookings()->where('id', $id)->firstOrFail();
 
         $booking->delete();
