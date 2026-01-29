@@ -3,19 +3,15 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens; // <--- 1. IMPORTANTE: Importar esto
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
-
-    public function bookings()
-    {
-        return $this->hasMany(Booking::class);
-    }
+    /** @use HasFactory<\Database\Factories\UserFactory> */
+    use HasApiTokens, HasFactory, Notifiable; // <--- 2. IMPORTANTE: Usarlo aquí
 
     /**
      * The attributes that are mass assignable.
@@ -26,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'credits', // Asegúrate de tener credits aquí también si los usas
     ];
 
     /**
@@ -49,5 +46,11 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // Relación con Bookings (Añádela si no la tienes para que funcione my-bookings)
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
     }
 }

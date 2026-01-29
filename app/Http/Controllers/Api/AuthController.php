@@ -24,6 +24,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->firstOrFail();
 
+        // Opcional: Borrar tokens viejos para que solo haya una sesión activa
         $user->tokens()->delete();
 
         $token = $user->createToken('auth_token')->plainTextToken;
@@ -38,7 +39,17 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
-        return response()->json(['message' => 'Sesión cerrada correctamente']);
+        // 1. Obtenemos el usuario de la petición
+        $user = $request->user();
+
+        // 2. Comprobamos si hay usuario y si tiene un token actual
+        if ($user && $user->currentAccessToken()) {
+            // Borramos el token que se usó para esta petición
+            $user->currentAccessToken()->delete();
+            return response()->json(['message' => 'Sesión cerrada correctamente']);
+        }
+
+        // Si llegamos aquí es que no había token o ya estaba borrado
+        return response()->json(['message' => 'No había sesión activa o el token era inválido'], 200);
     }
 }

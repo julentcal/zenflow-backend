@@ -5,13 +5,34 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\YogaClassController; 
 use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\PaymentController;
+use App\Http\Controllers\Api\CreditController;
 
 
 Route::get('/classes', [YogaClassController::class, 'index']);
-Route::post('/bookings', [BookingController::class, 'store']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
+    
+    // Usuario
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+    // Reservas (Bookings)
     Route::post('/bookings', [BookingController::class, 'store']);
     Route::get('/my-bookings', [BookingController::class, 'index']); 
     Route::delete('/bookings/{booking}', [BookingController::class, 'destroy']);
+    
+    // Pagos
+    Route::post('/buy-credits', [PaymentController::class, 'simulateBuyingCredits']);
+
+    Route::post('/buy-credits', [CreditController::class, 'buy']);
+    
+
+    Route::middleware('admin')->group(function () {
+        Route::post('/classes', [YogaClassController::class, 'store']);
+    });
+
 });

@@ -17,6 +17,7 @@ return new class extends Migration
         $table->text('description')->nullable();
         $table->dateTime('start_time'); 
         $table->integer('capacity')->default(15); 
+        $table->integer('credit_cost')->default(1);
         $table->string('instructor_name');
         $table->integer('duration_minutes')->default(60);
         $table->timestamps();
