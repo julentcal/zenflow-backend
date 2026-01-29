@@ -18,8 +18,6 @@ class Booking extends Model
 
     public function yogaClass()
     {
-        return $this->belongsTo(YogaClass::class);
+        return $this->belongsTo(YogaClass::class, 'yoga_class_id');
     }
-
-
 }
