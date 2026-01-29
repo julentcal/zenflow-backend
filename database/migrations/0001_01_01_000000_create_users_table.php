@@ -18,7 +18,6 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             
-            // AQUÍ PONEMOS EL DEFAULT A 3 DIRECTAMENTE
             $table->integer('credits')->default(3); 
             
             $table->enum('role', ['client', 'admin'])->default('client'); 

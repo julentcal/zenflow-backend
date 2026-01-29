@@ -13,19 +13,16 @@ Route::get('/classes', [YogaClassController::class, 'index']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     
-    // Usuario
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    // Reservas (Bookings)
     Route::post('/bookings', [BookingController::class, 'store']);
     Route::get('/my-bookings', [BookingController::class, 'index']); 
     Route::delete('/bookings/{booking}', [BookingController::class, 'destroy']);
     
-    // Pagos
     Route::post('/buy-credits', [PaymentController::class, 'simulateBuyingCredits']);
 
     Route::post('/buy-credits', [CreditController::class, 'buy']);

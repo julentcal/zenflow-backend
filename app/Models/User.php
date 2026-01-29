@@ -48,7 +48,6 @@ class User extends Authenticatable
         ];
     }
 
-    // Relación con Bookings (Añádela si no la tienes para que funcione my-bookings)
     public function bookings()
     {
         return $this->hasMany(Booking::class);
