@@ -10,7 +10,9 @@ RUN apk add --no-cache \
     unzip \
     postgresql-dev \
     oniguruma-dev \
-    libzip-dev
+    libzip-dev \
+    nginx \
+    supervisor
 
 # Instalar extensiones de PHP
 RUN docker-php-ext-install \
@@ -56,11 +58,16 @@ RUN npm run build
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
+# Copiar configuraciones de Nginx y Supervisor
+COPY docker/nginx/production.conf /etc/nginx/conf.d/default.conf
+COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 # Copiar y configurar script de entrada
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# Exponer puerto 9000 para PHP-FPM
+# Exponer puerto 9000 para PHP-FPM y 80 para Nginx
 EXPOSE 9000
+EXPOSE 80
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

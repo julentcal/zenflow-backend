@@ -13,5 +13,5 @@ echo "Limpiando cache..."
 php artisan config:cache
 php artisan route:cache
 
-echo "Iniciando PHP-FPM..."
-php-fpm
+echo "Iniciando Supervisor..."
+exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
