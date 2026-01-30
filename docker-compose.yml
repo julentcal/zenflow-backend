@@ -1,6 +1,32 @@
 version: '3.8'
 
 services:
+  # Migrate and Seed Database
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_migrate
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+      - ./storage:/var/www/html/storage
+      - ./bootstrap/cache:/var/www/html/bootstrap/cache
+    networks:
+      - laravel_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DATABASE=${DB_DATABASE:-laravel_api}
+      - DB_USERNAME=${DB_USERNAME:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-secret}
+    command: sh -c "php artisan migrate --force && php artisan db:seed --class=DatabaseSeeder --force"
+    profiles:
+      - init
+
   # Laravel Application
   app:
     build:

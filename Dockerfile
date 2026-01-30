@@ -66,12 +66,13 @@ COPY docker/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY docker/nginx/production.conf /etc/nginx/conf.d/default.conf
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Copiar y configurar script de entrada
+# Copiar y configurar scripts de entrada
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+COPY docker/start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh /usr/local/bin/start.sh
 
 # Exponer puerto 9000 para PHP-FPM y 80 para Nginx
 EXPOSE 9000
 EXPOSE 80
 
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/start.sh"]
