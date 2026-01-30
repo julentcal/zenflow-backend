@@ -11,16 +11,22 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Crear ADMIN con saldo para pruebas
-        User::factory()->create([
-            'name' => 'Admin Yoga',
-            'email' => 'admin@admin.com',
-            'password' => bcrypt('12345678'),
-            'credits' => 20, // <--- LE DAMOS SALDO PARA PROBAR
-        ]);
+        // 1. Crear/actualizar ADMIN con saldo para pruebas
+        User::updateOrCreate(
+            ['email' => 'admin@admin.com'],
+            [
+                'name' => 'Admin Yoga',
+                'password' => bcrypt('12345678'),
+                'credits' => 20, // <--- LE DAMOS SALDO PARA PROBAR
+            ]
+        );
 
-        // 2. Crear usuarios normales
-        User::factory(5)->create();
+        // 2. Crear usuarios normales (solo si faltan)
+        $existingUsers = User::where('email', '!=', 'admin@admin.com')->count();
+        $usersToCreate = max(0, 5 - $existingUsers);
+        if ($usersToCreate > 0) {
+            User::factory($usersToCreate)->create();
+        }
 
         // 3. DEFINICIÓN DE RUTINAS
         $rutina_L_X_V = [
@@ -64,26 +70,30 @@ class DatabaseSeeder extends Seeder
 
                 if ($conteoDomingos % 4 == 1) {
                     // EVENTO 1: BARRE
-                    YogaClass::factory()->create([
-                        'start_time' => $fechaBase->copy()->setTime(10, 30, 0),
-                        'name' => '🩰 Taller Barre + Bordado',
-                        'instructor_name' => 'Julia E. (Mardis)',
-                        'duration_minutes' => 180, 
-                        'capacity' => 12,
-                        'credit_cost' => 4, 
-                        'description' => 'Clase de barre seguida de taller de bordado creativo. (Precio especial: 4 bonos)'
-                    ]);
+                    $startTime = $fechaBase->copy()->setTime(10, 30, 0);
+                    YogaClass::updateOrCreate(
+                        ['start_time' => $startTime, 'name' => '🩰 Taller Barre + Bordado'],
+                        [
+                            'instructor_name' => 'Julia E. (Mardis)',
+                            'duration_minutes' => 180,
+                            'capacity' => 12,
+                            'credit_cost' => 4,
+                            'description' => 'Clase de barre seguida de taller de bordado creativo. (Precio especial: 4 bonos)'
+                        ]
+                    );
                 } else {
                     // EVENTO 2: YOGA + VINO
-                    YogaClass::factory()->create([
-                        'start_time' => $fechaBase->copy()->setTime(10, 30, 0),
-                        'name' => '🧶 Taller Yoga + Vino',
-                        'instructor_name' => 'Carmen P. (Enóloga)',
-                        'duration_minutes' => 180,
-                        'capacity' => 12,
-                        'credit_cost' => 4, 
-                        'description' => 'Flow suave para soltar manos y taller de crochet. (Precio especial: 4 bonos)'
-                    ]);
+                    $startTime = $fechaBase->copy()->setTime(10, 30, 0);
+                    YogaClass::updateOrCreate(
+                        ['start_time' => $startTime, 'name' => '🧶 Taller Yoga + Vino'],
+                        [
+                            'instructor_name' => 'Carmen P. (Enóloga)',
+                            'duration_minutes' => 180,
+                            'capacity' => 12,
+                            'credit_cost' => 4,
+                            'description' => 'Flow suave para soltar manos y taller de crochet. (Precio especial: 4 bonos)'
+                        ]
+                    );
                 }
 
                 continue; // Termina el domingo, pasa al siguiente día
@@ -103,14 +113,16 @@ class DatabaseSeeder extends Seeder
             // Crear las clases normales del día
             foreach ($clasesDelDia as $claseInfo) {
                 $hora = $claseInfo[0];
-                YogaClass::factory()->create([
-                    'start_time' => $fechaBase->copy()->setTime($hora, 0, 0),
-                    'name' => $claseInfo[1],
-                    'instructor_name' => $claseInfo[2],
-                    'duration_minutes' => ($hora == 14) ? 45 : 60,
-                    'capacity' => 15,
-                    'credit_cost' => 1 
-                ]);
+                $startTime = $fechaBase->copy()->setTime($hora, 0, 0);
+                YogaClass::updateOrCreate(
+                    ['start_time' => $startTime, 'name' => $claseInfo[1]],
+                    [
+                        'instructor_name' => $claseInfo[2],
+                        'duration_minutes' => ($hora == 14) ? 45 : 60,
+                        'capacity' => 15,
+                        'credit_cost' => 1
+                    ]
+                );
             }
         }
     }
