@@ -22,5 +22,5 @@ else
     echo "Las migraciones ya se ejecutaron anteriormente"
 fi
 
-echo "Iniciando aplicación..."
-exec "$@"
+echo "Iniciando Supervisor..."
+exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
