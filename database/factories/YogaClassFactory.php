@@ -30,21 +30,21 @@ class YogaClassFactory extends Factory
         ];
 
         
-        $hora = fake()->randomElement([
+        $hora = $this->faker->randomElement([
             7, 8, 9, 10, 11,       
             17, 18, 19, 20    
         ]);
 
-        $fecha = fake()->dateTimeBetween('now', '+1 month');
+        $fecha = $this->faker->dateTimeBetween('now', '+1 month');
         $fecha->setTime($hora, 0, 0);
 
         return [
-            'name' => fake()->randomElement($clases),
-            'instructor_name' => fake('es_ES')->name(), 
-            'description' => fake('es_ES')->realText(100), 
+            'name' => $this->faker->randomElement($clases),
+            'instructor_name' => $this->faker->name(), 
+            'description' => $this->faker->realText(100), 
             'start_time' => $fecha,
-            'duration_minutes' => fake()->randomElement([60, 75, 90]),
-            'capacity' => fake()->numberBetween(10, 20),
+            'duration_minutes' => $this->faker->randomElement([60, 75, 90]),
+            'capacity' => $this->faker->numberBetween(10, 20),
         ];
     }
 }
