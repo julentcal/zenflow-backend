@@ -1,0 +1,43 @@
+# Docker
+docker-compose.override.yml
+
+# Node modules
+node_modules/
+
+# Archivos de build
+public/build
+public/hot
+public/storage
+
+# Storage
+storage/*.key
+storage/pail
+
+# Vendor (se instala en el contenedor)
+vendor/
+
+# Environment
+.env.backup
+.env.production
+
+# IDE
+.idea/
+.vscode/
+.fleet/
+.zed/
+.nova/
+.phpactor.json
+
+# Testing
+.phpunit.result.cache
+.phpunit.cache
+auth.json
+
+# Logs
+*.log
+.DS_Store
+
+# Git
+.git/
+.gitignore
+README.md
