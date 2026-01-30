@@ -47,6 +47,11 @@ COPY . .
 # Instalar dependencias de Composer
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
+# Instalar Node.js y dependencias de frontend
+RUN apk add --no-cache nodejs npm
+RUN npm install
+RUN npm run build
+
 # Configurar permisos
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
