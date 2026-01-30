@@ -26,6 +26,9 @@ RUN docker-php-ext-install \
     bcmath \
     opcache
 
+# Forzar a PHP-FPM a escuchar en una interfaz de red más amplia
+RUN sed -i 's/listen = 127.0.0.1:9000/listen = 9000/g' /usr/local/etc/php-fpm.d/www.conf
+
 # Configurar opcache para producción
 RUN { \
     echo 'opcache.enable=1'; \
