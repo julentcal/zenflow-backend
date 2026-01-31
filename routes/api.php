@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\CreditController;
 // Rutas Públicas
 Route::get('/classes', [YogaClassController::class, 'index']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
 
 // Rutas Protegidas (Requieren Token)
 Route::middleware('auth:sanctum')->group(function () {
