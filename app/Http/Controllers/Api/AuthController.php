@@ -65,8 +65,11 @@ class AuthController extends Controller
         /** @var \App\Models\User $user */
         $user = $request->user();
 
-        if ($user && $user->currentAccessToken()) {
-            $request->user()->currentAccessToken()->delete();
+        /** @var \Laravel\Sanctum\PersonalAccessToken|null $token */
+        $token = $user?->currentAccessToken();
+
+        if ($token) {
+            $token->delete();
             return response()->json(['message' => 'Sesión cerrada correctamente']);
         }
 
